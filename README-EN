@@ -1,0 +1,12 @@
+To run the plugin a user-related opml.xml is needed to be placed in <XBMC-Home>/userdata/addon_data/plugin.audio.PodCatcher/. Use your default rss-reader to generate this file, this saves time;) 
+This Plugin supports following OPML - Outline attributes:
+  * xmlUrl = the kink to the feed
+  * type = feed-type (currently RSS only)
+  * text = userdefined feed-title
+  * fetchInterval = time in minutes between two refreshes. alternative: hourly,daily,weekly,monthly
+  * maxArticleAge = 
+  * maxArticleNumber = 
+
+the last both attributes don't affect the amount of bytes loaded or parsed. They affect how much is displayed an localy cached. After the first load the opml.xml isn't a valid opml-file. It will be extended with some attributes an a local-cacha attached to eacht feed-outline-node. On a second load, only this single xml-file have to be loaded. Keep this file small and all runs fast ;)
+
+Attention: the python-minidom implementations has some "problems" with textnodes. After creating the opml file, remove all whitespaces betwenn the node-tags.
