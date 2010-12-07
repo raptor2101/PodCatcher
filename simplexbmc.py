@@ -120,7 +120,7 @@ class SimpleXbmcGui(object):
     xbmc.executebuiltin("Container.Refresh")
     
   def durationStringToSec(self, durationString):
-    if(self.regex_duration.match(durationString) is not None):
+    if(durationString is not None and self.regex_duration.match(durationString) is not None):
       decimalArray = self.regex_decimal.findall(durationString);
       if(len(decimalArray)==3):
         return int(decimalArray[0])*3600 + int(decimalArray[1])*60 +int(decimalArray[2])

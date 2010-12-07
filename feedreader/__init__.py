@@ -18,6 +18,7 @@
 import time,urllib,re;
 from archivefile import ArchiveFile
 regex_dateString = re.compile("\\d{2} ((\\w{3})|(\\d{2})) \\d{4}");
+regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
 month_replacements = {
     "Jan":"01",
     "Feb":"02",
@@ -165,10 +166,18 @@ class Feed(object):
       return "";
   
   def parseDate(self,dateString):
-    dateString = regex_dateString.search(dateString).group();
-    for month in month_replacements.keys():
-      dateString = dateString.replace(month,month_replacements[month]);
-    return time.strptime(dateString,"%d %m %Y");
+    dateMatch = regex_dateString.search(dateString);
+    if(dateMatch is not None):
+      dateString = dateMatch.group();
+      for month in month_replacements.keys():
+        dateString = dateString.replace(month,month_replacements[month]);
+      return time.strptime(dateString,"%d %m %Y");
+    else: 
+     dateMatch = regex_shortdateString.search(dateString)
+     if(dateMatch is not None):
+       dateString = dateMatch.group();
+       return time.strptime(dateString,"%Y-%m-%d");
+    return 0;
     
   def writeDate(self, date):
     return time.strftime("%d %m %Y",date);

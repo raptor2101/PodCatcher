@@ -16,9 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 from rss import RssFeed;
+from atom import AtomFeed;
 class FeedFactory:
   def getFeed(self, feedNode, gui):
     feedVersion = feedNode.getAttribute("type")
     if(feedVersion == "rss"):
       return RssFeed(feedNode, gui);
+    if(feedVersion == "atom"):
+      return AtomFeed(feedNode, gui);
   getFeed = classmethod(getFeed)
