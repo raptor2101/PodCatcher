@@ -13,16 +13,16 @@
    <provides>audio</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>A plugin to play Podcasts</summary>
     <summary lang="de">Ein Plugin um Podcast etwas komfortabler abzuspielen</summary>
-    <description>
-      A Plugin to listen and organize podcast.
-      IMPORTANT: This plugins needs a user-generated opml.xml to be runable. Please read the README-File first.    
-    </description>
+    <summary lang="en">A plugin to play Podcasts</summary>
     <description lang="de">
       PodCatcher ist ein Plugin zum komfortablen abspielen von Podcasts. Die Oberfläche ist einfach gehalten um möglichst wenig zu stören und eine schnelle navigation möglich zu machen.
       
       WICHTIG: das Plugin ist nicht ohne eine vom User erstellte opml.xml lauffähig. Bitte die README-Datei lesen.
+    </description>
+    <description lang="en">
+      A Plugin to listen and organize podcast.
+      IMPORTANT: This plugins needs a user-generated opml.xml to be runable. Please read the README-File first.    
     </description>
     <platform>all</platform>
   </extension>
