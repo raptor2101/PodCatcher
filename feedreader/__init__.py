@@ -51,7 +51,10 @@ class FeedItem(object):
     
 class Feed(object):
   def loadOpmlNode(self,opmlNode):
+    self.feedUrl = opmlNode.getAttribute("xmlUrl");
     self.objectId = opmlNode.getAttribute("id");
+    if(self.objectId == ""):
+      self.objectId = self.feedUrl.replace("/","_");
     self.archiveFile=ArchiveFile(self.objectId);
     
     self.feedItems = self.archiveFile.feedItems;
@@ -59,12 +62,24 @@ class Feed(object):
       self.gui.log(feedItem.title);
     self.lastLoad = self.archiveFile.lastLoad;
     
-    self.feedUrl = opmlNode.getAttribute("xmlUrl");
-    self.fetchInterval = self.parseFetchInterval(opmlNode.getAttribute("fetchInterval"));
-    self.title = opmlNode.getAttribute("text");
-    self.maxArticleAge = int(opmlNode.getAttribute("maxArticleAge"));
-    self.maxArticleNumber = int(opmlNode.getAttribute("maxArticleNumber"));
     
+    
+    self.title = opmlNode.getAttribute("text");
+    
+    try:
+      self.fetchInterval = self.parseFetchInterval(opmlNode.getAttribute("fetchInterval"));
+    except:
+      self.fetchInterval = 0;
+    
+    try:
+      self.maxArticleAge = int(opmlNode.getAttribute("maxArticleAge"));
+    except:
+      self.maxArticleAge = 99;
+    
+    try:
+      self.maxArticleNumber = int(opmlNode.getAttribute("maxArticleNumber"));
+    except:
+      self.maxArticleNumber = 99;
     
   
   def saveChanges(self):
