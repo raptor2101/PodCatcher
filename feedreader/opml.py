@@ -30,11 +30,14 @@ class OpmlFolder(object):
     self.title = rootNode.getAttribute('text');
         
     for node in self.rootNode.childNodes:
-      if node.hasChildNodes() and node.firstChild.tagName == "outline":
-        element = OpmlFolder(node, self.gui);
-      else:
-        element = FeedFactory.getFeed(node, self.gui)
-      self.elements.append(element);
+      try:
+        if node.hasChildNodes() and node.firstChild.tagName == "outline":
+          element = OpmlFolder(node, self.gui);
+        else:
+          element = FeedFactory.getFeed(node, self.gui)
+        self.elements.append(element);
+      except:
+        self.gui.log("Something goes wrong while processing the node %s"%rootNode.getAttribute('text'));
     
   def displayMenu(self, path):
     if len(path) > 0:

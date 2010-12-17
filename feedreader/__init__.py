@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 import time,urllib,re;
 from archivefile import ArchiveFile
+regex_mediaLink = re.compile("(http|ftp)://.*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
 regex_dateString = re.compile("\\d{2} ((\\w{3})|(\\d{2})) \\d{4}");
 regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
 month_replacements = {
@@ -134,7 +135,7 @@ class Feed(object):
       self.saveChanges();
     else:
       self.gui.play(self);
-      self.markRead();
+      #self.markRead();
     
       
   def markRead(self, path = []):
@@ -202,6 +203,14 @@ class Feed(object):
       return True;
     else:
       return False;
+  
+  def parseIndirectItem(self, targetUrl):
+    self.gui.log(targetUrl);
+    htmlPage = self.loadPage(targetUrl);
+    link = regex_mediaLink.search(htmlPage).group();
+    self.gui.log(link);
+    
+    return link;
   
   def writeBoolean(self, boolean):
     if(boolean):

@@ -57,10 +57,15 @@ class RssFeed (Feed):
       feedItem.author = self.readText(itemNode,"itunes:author");
       feedItem.duration = self.readText(itemNode,"itunes:duration").replace("00:","");
       
-      enclosureNode = itemNode.getElementsByTagName("enclosure")[0];
+      enclosures = itemNode.getElementsByTagName("enclosure")
+      if(len(enclosures) > 0):
+        enclosureNode = itemNode.getElementsByTagName("enclosure")[0];
       
-      feedItem.link = enclosureNode.getAttribute("url");
-      feedItem.size = int(enclosureNode.getAttribute("length"));
+        feedItem.link = enclosureNode.getAttribute("url");
+        feedItem.size = int(enclosureNode.getAttribute("length"));
+      else:
+        feedItem.size = 0;
+        feedItem.link = self.parseIndirectItem(self.readText(itemNode,"link"));
       
       descriptionNode = itemNode.getElementsByTagName("itunes:summary");
       if(len(descriptionNode)>0):
