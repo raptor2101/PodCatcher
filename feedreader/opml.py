@@ -20,14 +20,14 @@ import shutil,os,urllib2;
 from xml.dom import minidom;
 from xml.dom import Node;
 from feedfactory import FeedFactory;
-
+from html import transformHtmlCodes;
     
 class OpmlFolder(object):
   def __init__(self,rootNode, gui):
     self.rootNode = rootNode;
     self.gui = gui;
     self.elements = [];
-    self.title = rootNode.getAttribute('text');
+    self.title = transformHtmlCodes(rootNode.getAttribute('text'));
         
     for node in self.rootNode.childNodes:
       try:
