@@ -105,17 +105,18 @@ class OpmlFolder(object):
       element.getAllItems(items);
     
 class OpmlFile:
-  def __init__(self, path, gui):
-    self.path = path;
+  def __init__(self, opmlFile, archivePath, gui):
     self.gui = gui;
     self.opmlFolder = OpmlFolder();
-    archiveFile = path+".archive";
-    if(OpmlArchiveFile.updateNeeded(path,archiveFile)):
-      self.xmlDoc = minidom.parse(path)
+    archiveFile = os.path.join(archivePath,"opml.archive");
+    if(OpmlArchiveFile.updateNeeded(opmlFile, archiveFile)):
+      self.xmlDoc = minidom.parse(opmlFile)
       self.cleanupNodes(self.xmlDoc.documentElement);
       self.xmlDoc.documentElement.normalize() 
+      
       for bodyNode in  self.xmlDoc.getElementsByTagName('body'):
         self.opmlFolder.loadFromNode(bodyNode, self.gui )
+      
       OpmlArchiveFile.save(self.opmlFolder, archiveFile);
     else:
       state = OpmlArchiveFile.load(archiveFile);

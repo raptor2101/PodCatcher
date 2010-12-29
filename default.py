@@ -70,14 +70,16 @@ if not os.path.exists(DIR_ARCHIVES):
 ArchiveFile.setArchivePath(DIR_ARCHIVES);
 
 
-PATH_FILE_OPML = os.path.join(DIR_HOME, 'opml.xml')
+PATH_FILE_OPML = __settings__.getSetting("opmlFile")
+if (PATH_FILE_OPML == ""):
+  PATH_FILE_OPML = os.path.join(DIR_HOME,"opml.xml");
 if not os.path.exists(PATH_FILE_OPML):
   gui.errorOK(__language__(1040),__language__(1041));
 else:
   gui.log(PATH_FILE_OPML)
   
   
-  opmlFile = OpmlFile(PATH_FILE_OPML, gui);
+  opmlFile = OpmlFile(PATH_FILE_OPML, DIR_HOME, gui);
   
   if not path:
     path = ""
