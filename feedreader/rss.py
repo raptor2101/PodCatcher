@@ -23,10 +23,6 @@ findPicLink = re.compile("src=\".*?\"");
 
 
 class RssFeed (Feed):
-  def __init__(self, opmlNode, gui):
-    self.gui = gui;
-    self.loadOpmlNode(opmlNode);
-          
   def updateFeed(self):
     try:    
       xmlPage = self.loadPage(self.feedUrl);

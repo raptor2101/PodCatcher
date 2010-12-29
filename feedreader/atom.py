@@ -6,11 +6,7 @@ from feedreader import *;
 findPicLink = re.compile("src=\".*?\"");
 
 
-class AtomFeed (Feed):
-  def __init__(self, opmlNode, gui):
-    self.gui = gui;
-    self.loadOpmlNode(opmlNode);
-          
+class AtomFeed (Feed):          
   def updateFeed(self):
     self.gui.log("Load: "+self.feedUrl);
     xmlPage = self.loadPage(self.feedUrl);

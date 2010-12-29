@@ -20,6 +20,7 @@ from archivefile import ArchiveFile
 regex_mediaLink = re.compile("(http|ftp)://.*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
 regex_dateString = re.compile("\\d{2} ((\\w{3})|(\\d{2})) \\d{4}");
 regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
+regex_replaceUnusableChar = re.compile("[:/ \\.]")
 month_replacements = {
     "Jan":"01",
     "Feb":"02",
@@ -51,11 +52,12 @@ class FeedItem(object):
     self.size = None;
     
 class Feed(object):
-  def loadOpmlNode(self,opmlNode):
+  def loadFromNode(self, opmlNode, gui):
+    self.gui = gui;
     self.feedUrl = opmlNode.getAttribute("xmlUrl");
     self.objectId = opmlNode.getAttribute("id");
     if(self.objectId == ""):
-      self.objectId = self.feedUrl.replace("/","_");
+      self.objectId = regex_replaceUnusableChar.sub("_",self.feedUrl);
     self.archiveFile=ArchiveFile(self.objectId);
     
     self.feedItems = self.archiveFile.feedItems;
@@ -82,7 +84,24 @@ class Feed(object):
     except:
       self.maxArticleNumber = 99;
     
-  
+  def loadFromState(self, stateObject, gui):
+    self.gui = gui;
+    self.feedUrl = stateObject.feedUrl
+    self.objectId = stateObject.objectId
+    self.archiveFile=ArchiveFile(self.objectId);
+    
+    self.feedItems = self.archiveFile.feedItems;
+    for feedItem in self.feedItems:
+      self.gui.log(feedItem.title);
+    self.lastLoad = self.archiveFile.lastLoad;
+    
+    
+    
+    self.title = stateObject.title
+    self.fetchInterval = stateObject.fetchInterval
+    self.maxArticleAge = stateObject.maxArticleAge
+    self.maxArticleNumber = stateObject.maxArticleNumber
+    
   def saveChanges(self):
     self.archiveFile.save();
   
@@ -234,5 +253,3 @@ class Feed(object):
         return ''
     except:
       return ''
-      
-    

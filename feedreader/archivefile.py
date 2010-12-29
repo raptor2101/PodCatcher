@@ -18,7 +18,47 @@
 import xbmcaddon, os, pickle;
 from xml.dom import minidom
 
+class FeedState(object):
+  def __init__(self, feed):
+    self.feedUrl = feed.feedUrl;
+    self.objectId = feed.objectId;
+    self.title = feed.title;
+    self.fetchInterval = feed.fetchInterval
+    self.maxArticleAge = feed.maxArticleAge
+    self.maxArticleNumber = feed.maxArticleNumber
+    self.feedVersion = feed.feedVersion
+    
+class OpmlFolderState(object):
+  def __init__(self, opmlFolder):
+    self.title = opmlFolder.title;
+    self.elements = [];
+    for subFolder in opmlFolder.elements:
+      if(type(subFolder).__name__ == "OpmlFolder"):
+        element = OpmlFolderState(subFolder);
+      else:
+        element = FeedState(subFolder);
+      self.elements.append(element);
 
+class OpmlArchiveFile(object):
+  def save(self, opmlFolder, filePath):
+    archiveFile = open(filePath,"w");
+    state = OpmlFolderState(opmlFolder);
+    pickle.dump(state, archiveFile);
+  save = classmethod(save)
+  
+  def load(self,filePath):
+    archiveFile = open(filePath,"r");
+    return pickle.load(archiveFile);
+  load = classmethod(load);
+  
+  def updateNeeded(self, sourceFile, archiveFile):
+    if(not os.path.exists(archiveFile)):
+      return False;
+    sourceChanged = os.stat(sourceFile)[8];
+    archiveChanged = os.stat(archiveFile)[8];
+    return sourceChanged>archiveChanged
+  updateNeeded = classmethod(updateNeeded);
+  
 class ArchiveFile(object):
   def __init__(self, itemId):
     global __archiveDir__;
@@ -32,7 +72,7 @@ class ArchiveFile(object):
       input = open(self.archiveFile, 'r')
       unsortedObject = pickle.load(input);
       self.feedItems = sorted(unsortedObject, key = lambda item:item.date, reverse=True);
-      self.lastLoad = stats = os.stat(self.archiveFile)[8];
+      self.lastLoad = os.stat(self.archiveFile)[8];
   
   @classmethod
   def setArchivePath(self, path):

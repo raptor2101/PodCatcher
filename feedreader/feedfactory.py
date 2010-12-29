@@ -18,10 +18,24 @@
 from rss import RssFeed;
 from atom import AtomFeed;
 class FeedFactory:
-  def getFeed(self, feedNode, gui):
+  def getFeedFromNode(self, feedNode, gui):
     feedVersion = feedNode.getAttribute("type")
     if(feedVersion == "rss"):
-      return RssFeed(feedNode, gui);
+      feed = RssFeed();
     if(feedVersion == "atom"):
-      return AtomFeed(feedNode, gui);
-  getFeed = classmethod(getFeed)
+      feed = AtomFeed();
+    feed.loadFromNode(feedNode, gui);
+    feed.feedVersion = feedVersion
+    return feed;
+  getFeedFromNode = classmethod(getFeedFromNode)
+  
+  def getFeedFromState(self, feedState, gui):
+    feedVersion = feedState.feedVersion
+    if(feedVersion == "rss"):
+      feed = RssFeed();
+    if(feedVersion == "atom"):
+      feed = AtomFeed();
+    feed.loadFromState(feedState,gui);
+    feed.feedVersion = feedVersion
+    return feed;
+  getFeedFromState = classmethod(getFeedFromState)
