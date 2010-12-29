@@ -53,7 +53,7 @@ class OpmlArchiveFile(object):
   
   def updateNeeded(self, sourceFile, archiveFile):
     if(not os.path.exists(archiveFile)):
-      return False;
+      return True;
     sourceChanged = os.stat(sourceFile)[8];
     archiveChanged = os.stat(archiveFile)[8];
     return sourceChanged>archiveChanged
