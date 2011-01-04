@@ -103,6 +103,7 @@ class Feed(object):
     self.maxArticleNumber = stateObject.maxArticleNumber
     
   def saveChanges(self):
+    self.gui.log(self.archiveFile.archiveFile);
     self.archiveFile.save();
   
   def hasUnreadItems(self):

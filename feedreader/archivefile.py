@@ -41,13 +41,13 @@ class OpmlFolderState(object):
 
 class OpmlArchiveFile(object):
   def save(self, opmlFolder, filePath):
-    archiveFile = open(filePath,"w");
+    archiveFile = open(filePath,"wb");
     state = OpmlFolderState(opmlFolder);
     pickle.dump(state, archiveFile);
   save = classmethod(save)
   
   def load(self,filePath):
-    archiveFile = open(filePath,"r");
+    archiveFile = open(filePath,"rb");
     return pickle.load(archiveFile);
   load = classmethod(load);
   
@@ -66,10 +66,10 @@ class ArchiveFile(object):
     self.feedItems = [];
     self.lastLoad = 0;
     
-    self.archiveFile = os.path.join(__archiveDir__,itemId);
+    self.archiveFile = os.path.join(__archiveDir__,itemId+".archive");
     
     if os.path.exists(self.archiveFile):
-      input = open(self.archiveFile, 'r')
+      input = open(self.archiveFile, 'rb')
       unsortedObject = pickle.load(input);
       self.feedItems = sorted(unsortedObject, key = lambda item:item.date, reverse=True);
       self.lastLoad = os.stat(self.archiveFile)[8];
@@ -80,5 +80,5 @@ class ArchiveFile(object):
     __archiveDir__ = path;
   
   def save(self):
-    output = open(self.archiveFile, 'w')
+    output = open(self.archiveFile, 'wb')
     pickle.dump(self.feedItems, output);

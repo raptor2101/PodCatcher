@@ -19,7 +19,7 @@
  A plugin to organize audio-podcast
 """
 
-import sys, os, xbmcaddon
+import sys, os, xbmcaddon,xbmc
 from feedreader.opml import OpmlFile
 from feedreader.archivefile import ArchiveFile
 
@@ -60,7 +60,7 @@ __language__ = __settings__.getLocalizedString
 
 gui = SimpleXbmcGui(path);
 
-DIR_HOME = __settings__.getAddonInfo("profile")
+DIR_HOME = xbmc.translatePath(__settings__.getAddonInfo("profile"))
 if not os.path.exists(DIR_HOME):
   os.mkdir(DIR_HOME);
 
