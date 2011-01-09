@@ -2,7 +2,7 @@
 <addon
   id="plugin.audio.podcatcher"
   version="0.1.1"
-  name="AudioPodcaster"
+  name="AudioPodcatcher"
   provider-name="Raptor 2101 [raptor2101@gmx.de]">
   <requires>
    <import addon="xbmc.python" version="1.0"/>
