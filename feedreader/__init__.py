@@ -155,7 +155,7 @@ class Feed(object):
       self.saveChanges();
     else:
       self.gui.play(self);
-      #self.markRead();
+      self.markRead();
     
       
   def markRead(self, path = []):
