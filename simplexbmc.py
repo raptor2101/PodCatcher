@@ -117,6 +117,7 @@ class SimpleXbmcGui(object):
   
   def closeMenuContext(self):
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    
   def refresh(self):
     xbmc.executebuiltin("Container.Refresh")
     
