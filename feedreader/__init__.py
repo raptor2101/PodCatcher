@@ -175,6 +175,7 @@ class Feed(object):
   def checkArticleAge(self, articleDate):
     articleAge = time.time() - time.mktime(articleDate);
     articleAge = articleAge / 86400 #to days;
+    
     return articleAge < self.maxArticleAge;
   
   def updatedNeeded(self):
