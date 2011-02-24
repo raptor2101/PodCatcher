@@ -108,7 +108,7 @@ class SimpleXbmcGui(object):
         listItem = self.buildMediaItem(item,False);
         playlist.add(url=item.link, listitem=listItem)
       
-      player.play(playlist,playerItem);
+      player.play(playlist, playerItem);
       xbmc.executebuiltin("ActivateWindow(musicplaylist)");
   
   def openMenuContext(self):
