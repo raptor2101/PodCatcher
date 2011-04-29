@@ -62,7 +62,7 @@ class SimpleXbmcGui(object):
       });
     return liz;
   
-  def buildMenuEntry(self, menuElement ):
+  def buildMenuEntry(self, menuElement, elementCount ):
     if(self.path == ""):
       path = "%d"%(self.counter);
     else:
@@ -90,11 +90,10 @@ class SimpleXbmcGui(object):
         ]
       liz.addContextMenuItems(contextMenuEntries,True)
       u = "%s?path=%s&action=browse" % (sys.argv[0],path)
-      xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+      xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems = elementCount)
     self.counter+=1;
   
   def play(self, playableObject):
-    xbmc.executebuiltin("Playlist.Clear");
     player = xbmc.Player();
     playerItem = xbmcgui.ListItem(playableObject.title)
     if(type(playableObject).__name__ == 'FeedItem'):
@@ -104,6 +103,7 @@ class SimpleXbmcGui(object):
       items = [];
       playableObject.getAllUnreadItems(items);
       playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+      playlist.clear();
       for item in items:
         listItem = self.buildMediaItem(item,False);
         playlist.add(url=item.link, listitem=listItem)
