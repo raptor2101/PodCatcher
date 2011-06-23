@@ -95,6 +95,8 @@ class SimpleXbmcGui(object):
   
   def play(self, playableObject):
     player = xbmc.Player();
+    playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+    playlist.clear();
     playerItem = xbmcgui.ListItem(playableObject.title)
     if(type(playableObject).__name__ == 'FeedItem'):
       self.log("play(): " + playableObject.link);
@@ -102,8 +104,7 @@ class SimpleXbmcGui(object):
     else:
       items = [];
       playableObject.getAllUnreadItems(items);
-      playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
-      playlist.clear();
+        
       for item in items:
         listItem = self.buildMediaItem(item,False);
         playlist.add(url=item.link, listitem=listItem)

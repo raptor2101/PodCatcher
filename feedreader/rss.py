@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
-import re;
+import re,traceback;
 from xml.dom import minidom
 from feedreader import *;
 findPicLink = re.compile("src=\".*?\"");
@@ -93,5 +93,7 @@ class RssFeed (Feed):
         if(counter>self.maxArticleNumber):
           break;
     except:
-      self.gui.log("Error while processing %s"%self.feedUrl)          
+      self.gui.log("Error while processing %s"%self.feedUrl)
+      traceback.print_exc();
+      traceback.print_stack();          
     self.shrinkFeedItems();
