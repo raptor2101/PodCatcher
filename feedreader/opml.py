@@ -28,7 +28,8 @@ class OpmlFolder(object):
     self.gui = gui;
     self.elements = [];
     self.title = transformHtmlCodes(rootNode.getAttribute('text'));
-        
+    self.picture = "";
+    
     for node in rootNode.childNodes:
       try:
         if node.hasChildNodes() and node.firstChild.tagName == "outline":
@@ -44,6 +45,8 @@ class OpmlFolder(object):
     self.gui = gui;
     self.elements = [];
     self.title = stateObject.title;
+    self.picture = "";
+    
     for stateElement in stateObject.elements:
       try:
         if(type(stateElement).__name__ == "OpmlFolderState"):

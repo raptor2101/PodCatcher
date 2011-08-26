@@ -82,7 +82,12 @@ class SimpleXbmcGui(object):
         title = "(*) %s"%(menuElement.title);
       else:
         title = "%s"%(menuElement.title);
-      liz=xbmcgui.ListItem(title, "")
+        
+      if(menuElement.picture is not ""):
+        liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=menuElement.picture)
+      else :
+        liz=xbmcgui.ListItem(title, "")
+        
       contextMenuEntries = [
         (translation(1010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
         (translation(1011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),

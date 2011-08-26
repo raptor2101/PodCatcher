@@ -59,7 +59,7 @@ class Feed(object):
     if(self.objectId == ""):
       self.objectId = regex_replaceUnusableChar.sub("_",self.feedUrl);
     self.archiveFile=ArchiveFile(self.objectId);
-    
+    self.picture = "";
     self.feedItems = self.archiveFile.feedItems;
     self.lastLoad = self.archiveFile.lastLoad;
     
@@ -90,8 +90,10 @@ class Feed(object):
     
     self.feedItems = self.archiveFile.feedItems;
     self.lastLoad = self.archiveFile.lastLoad;
-    
-    
+    try:
+      self.picture = self.archiveFile.picture;
+    except:
+      self.picture = "";
     
     self.title = stateObject.title
     self.fetchInterval = stateObject.fetchInterval

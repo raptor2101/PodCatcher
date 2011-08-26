@@ -23,11 +23,23 @@ findPicLink = re.compile("src=\".*?\"");
 
 
 class RssFeed (Feed):
+  def findImage(self, xmlDocument):
+    images = xmlDocument.getElementsByTagName("image");
+    if(len(images) > 0):
+      return self.readText(images[0], "url");
+    else:
+      images = xmlDocument.getElementsByTagName("itunes:image");
+      if(len(images) > 0):
+        return images[0].getAttribute("href");
+    return "";
+    
   def updateFeed(self):
     feedItems = [];
     try:    
       xmlPage = self.loadPage(self.feedUrl);
       xmlDocument = minidom.parseString(xmlPage);
+      self.picture = self.findImage(xmlDocument);
+      
       counter = 0;
       for itemNode in xmlDocument.getElementsByTagName("item"):
         try:
@@ -57,7 +69,10 @@ class RssFeed (Feed):
           else:
             descriptionNode = itemNode.getElementsByTagName("description")[0];
           
-          feedItem.description = descriptionNode.firstChild.data;
+          if descriptionNode.firstChild is not None:
+            feedItem.description = descriptionNode.firstChild.data;
+          else:
+            feedItem.description = "";
           
           link = findPicLink.search(feedItem.description)
           if(link is not None):
