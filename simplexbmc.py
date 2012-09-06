@@ -46,7 +46,7 @@ class SimpleXbmcGui(object):
       title = "(*) %s"%(title);
     else:
       title = "%s"%(title);
-    
+    self.log(element.picture)
     if(element.picture is not ""):
       liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=element.picture)
     else :
@@ -82,7 +82,7 @@ class SimpleXbmcGui(object):
         title = "(*) %s"%(menuElement.title);
       else:
         title = "%s"%(menuElement.title);
-        
+      self.log(menuElement.picture)
       if(menuElement.picture is not ""):
         liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=menuElement.picture)
       else :
