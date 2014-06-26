@@ -73,7 +73,7 @@ class SimpleXbmcGui(object):
       liz = self.buildMediaItem(menuElement,True);
       
       
-      liz.addContextMenuItems([(translation(1020),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path))],True)
+      liz.addContextMenuItems([(translation(4020),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path))],True)
       u = "%s?path=%s&action=play&guid=%s" % (sys.argv[0],path,menuElement.guid)
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
       
@@ -89,9 +89,9 @@ class SimpleXbmcGui(object):
         liz=xbmcgui.ListItem(title, "")
         
       contextMenuEntries = [
-        (translation(1010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
-        (translation(1011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
-        (translation(1030),"XBMC.RunPlugin(%s?path=%s&action=reload)"%(sys.argv[0],path))
+        (translation(4010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
+        (translation(4011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
+        (translation(4030),"XBMC.RunPlugin(%s?path=%s&action=reload)"%(sys.argv[0],path))
         ]
       liz.addContextMenuItems(contextMenuEntries,True)
       u = "%s?path=%s&action=browse" % (sys.argv[0],path)
