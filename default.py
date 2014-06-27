@@ -73,7 +73,7 @@ PATH_FILE_OPML = __settings__.getSetting("opmlFile")
 if (PATH_FILE_OPML == ""):
   PATH_FILE_OPML = os.path.join(DIR_HOME,"opml.xml");
 if not os.path.exists(PATH_FILE_OPML):
-  gui.errorOK(__language__(4040),__language__(4041));
+  gui.errorOK(__language__(30040),__language__(30041));
 else:
   gui.log(PATH_FILE_OPML)
   

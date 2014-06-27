@@ -89,9 +89,9 @@ class SimpleXbmcGui(object):
         liz=xbmcgui.ListItem(title, "")
         
       contextMenuEntries = [
-        (translation(4010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
-        (translation(4011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
-        (translation(4030),"XBMC.RunPlugin(%s?path=%s&action=reload)"%(sys.argv[0],path))
+        (translation(30010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
+        (translation(30011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
+        (translation(30030),"XBMC.RunPlugin(%s?path=%s&action=reload)"%(sys.argv[0],path))
         ]
       liz.addContextMenuItems(contextMenuEntries,True)
       u = "%s?path=%s&action=browse" % (sys.argv[0],path)
