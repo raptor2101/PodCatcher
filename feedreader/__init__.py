@@ -18,8 +18,8 @@
 import time,urllib,re;
 from archivefile import ArchiveFile
 regex_mediaLink = re.compile("(http|ftp)://.*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
-regex_dateStringShortYear = re.compile("\\d{2} ((\\w{3,})|(\\d{2})) \\d{2}");
-regex_dateString = re.compile("\\d{2} ((\\w{3,})|(\\d{2})) \\d{4}");
+regex_dateStringShortYear = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{2}");
+regex_dateString = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{4}");
 regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
 regex_replaceUnusableChar = re.compile("[:/ \\.\?\\\\]")
 month_replacements_long = {
