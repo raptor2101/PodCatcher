@@ -18,7 +18,7 @@
 import time,urllib2,re, gzip;
 from StringIO import StringIO;
 from archivefile import ArchiveFile
-regex_mediaLink = re.compile("(http|ftp)://.*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
+regex_mediaLink = re.compile("(http|ftp)://[^'\"]*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
 regex_dateStringShortYear = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{2}");
 regex_dateString = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{4}");
 regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
@@ -254,10 +254,13 @@ class Feed(object):
       return False;
   
   def parseIndirectItem(self, targetUrl):
-    self.gui.log(targetUrl);
+    self.gui.log("TargetUrl: "+targetUrl);
     htmlPage = self.loadPage(targetUrl);
-    link = regex_mediaLink.search(htmlPage).group();
-    self.gui.log(link);
+    match = regex_mediaLink.search(htmlPage);
+    if(match is None):
+      return "";
+    link = match.group();
+    self.gui.log("IndirectLink: "+link);
     
     return link;
   
