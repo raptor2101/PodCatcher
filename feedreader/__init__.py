@@ -212,7 +212,7 @@ class Feed(object):
     try:
       node = node.getElementsByTagName(textNode)[0].firstChild;
       return unicode(node.data);
-    except UnicodeDecodeError,UnicodeEncodeError,IndexError:
+    except (UnicodeDecodeError,UnicodeEncodeError,IndexError):
       return "";
 
   @staticmethod
