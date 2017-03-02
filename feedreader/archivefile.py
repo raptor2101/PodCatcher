@@ -14,7 +14,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os, pickle;
 from xml.dom import minidom
 
@@ -27,9 +27,8 @@ class FeedState(object):
     self.maxArticleAge = feed.maxArticleAge
     self.maxArticleNumber = feed.maxArticleNumber
     self.feedVersion = feed.feedVersion
-    
     self.picture = feed.picture
-    
+
 class OpmlFolderState(object):
   def __init__(self, opmlFolder):
     self.title = opmlFolder.title;
@@ -43,45 +42,41 @@ class OpmlFolderState(object):
       self.elements.append(element);
 
 class OpmlArchiveFile(object):
+  @classmethod
   def save(self, opmlFolder, filePath):
     archiveFile = open(filePath,"wb");
     state = OpmlFolderState(opmlFolder);
     pickle.dump(state, archiveFile);
-  save = classmethod(save)
-  
+
+  @classmethod
   def load(self,filePath):
     archiveFile = open(filePath,"rb");
     return pickle.load(archiveFile);
-  load = classmethod(load);
-  
+
+  @classmethod
   def updateNeeded(self, sourceFile, archiveFile):
     if(not os.path.exists(archiveFile)):
       return True;
     sourceChanged = os.stat(sourceFile)[8];
     archiveChanged = os.stat(archiveFile)[8];
     return sourceChanged>archiveChanged
-  updateNeeded = classmethod(updateNeeded);
-  
+
 class ArchiveFile(object):
   def __init__(self, itemId):
-    global __archiveDir__;
-    
     self.feedItems = [];
     self.lastLoad = 0;
-    
-    self.archiveFile = os.path.join(__archiveDir__,itemId+".archive");
-    
+    self.archiveFile = os.path.join(self.archiveDir,itemId+".archive");
+
     if os.path.exists(self.archiveFile):
       input = open(self.archiveFile, 'rb')
       unsortedObject = pickle.load(input);
       self.feedItems = sorted(unsortedObject, key = lambda item:item.date, reverse=True);
       self.lastLoad = os.stat(self.archiveFile)[8];
-  
+
   @classmethod
-  def setArchivePath(self, path):
-    global __archiveDir__;
-    __archiveDir__ = path;
-  
+  def setArchivePath(cls, path):
+    cls.archiveDir = path;
+
   def save(self):
     output = open(self.archiveFile, 'wb')
     pickle.dump(self.feedItems, output);
