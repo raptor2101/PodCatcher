@@ -14,7 +14,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
  A plugin to organize audio-podcast
 """
@@ -25,7 +25,6 @@ from feedreader.archivefile import ArchiveFile
 
 from simplexbmc import SimpleXbmcGui
 
-    
 __plugin__ = "AudioPodcast"
 __author__ = 'Raptor 2101 [raptor2101@gmx.de]'
 __date__ = '06-09-2010'
@@ -37,10 +36,10 @@ def get_params():
     if sys.argv[2]:
       paramPairs=sys.argv[2][1:].split( "&" )
       for paramsPair in paramPairs:
-	paramSplits = paramsPair.split('=')
-	if (len(paramSplits))==2:
-	  paramDict[paramSplits[0]] = paramSplits[1]
-  except:
+        paramSplits = paramsPair.split('=')
+        if (len(paramSplits))==2:
+        paramDict[paramSplits[0]] = paramSplits[1]
+  except IndexError:
     errorOK()
   return paramDict
 
@@ -76,22 +75,20 @@ if not os.path.exists(PATH_FILE_OPML):
   gui.errorOK(__language__(30040),__language__(30041));
 else:
   gui.log(PATH_FILE_OPML)
-  
-  
   opmlFile = OpmlFile(PATH_FILE_OPML, DIR_HOME, gui);
-  
+
   if not path:
     path = ""
     action = "browse"
-    
+
   gui.log("Path: "+path);
   gui.log("Action: "+action);
 
   if(len(path) > 0):
     path = path.split('.');
   else:
-    path = [];  
-  
+    path = [];
+
   if(action == "play" or action == "markRead" or action == "reload"):
     if action == "play":
       opmlFile.play(path);
@@ -99,7 +96,6 @@ else:
       opmlFile.markRead(path);
     else:
       opmlFile.reload(path);
-    
     gui.refresh();
   else:
     gui.openMenuContext();
