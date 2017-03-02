@@ -38,7 +38,7 @@ def get_params():
       for paramsPair in paramPairs:
         paramSplits = paramsPair.split('=')
         if (len(paramSplits))==2:
-        paramDict[paramSplits[0]] = paramSplits[1]
+          paramDict[paramSplits[0]] = paramSplits[1]
   except IndexError:
     errorOK()
   return paramDict
