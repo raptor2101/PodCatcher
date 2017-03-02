@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os,pickle;
+import os;
 from xml.dom import minidom;
 from xml.dom import Node;
 from feedfactory import FeedFactory;
@@ -77,7 +77,7 @@ class OpmlFolder(object):
       index = int(path.pop(0));
       self.gui.log("MarkRead: %d"%index);
       element = self.elements[index];
-      element.markRead(path); 
+      element.markRead(path);
     else:
       self.gui.log("Mark Elements Read");
       for element in self.elements:
