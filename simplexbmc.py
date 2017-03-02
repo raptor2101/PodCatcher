@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, urllib, os,re,time
+import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, re, time
 __plugin__ = "PodCatcher"
 
 regex_decimal = re.compile("\\d+");
