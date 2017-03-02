@@ -14,10 +14,11 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from rss import RssFeed;
 from atom import AtomFeed;
 class FeedFactory:
+  @classmethod
   def getFeedFromNode(self, feedNode, gui):
     feedVersion = feedNode.getAttribute("type")
     if(feedVersion == "rss"):
@@ -27,8 +28,8 @@ class FeedFactory:
     feed.loadFromNode(feedNode, gui);
     feed.feedVersion = feedVersion
     return feed;
-  getFeedFromNode = classmethod(getFeedFromNode)
-  
+
+  @classmethod
   def getFeedFromState(self, feedState, gui):
     feedVersion = feedState.feedVersion
     if(feedVersion == "rss"):
@@ -38,4 +39,3 @@ class FeedFactory:
     feed.loadFromState(feedState,gui);
     feed.feedVersion = feedVersion
     return feed;
-  getFeedFromState = classmethod(getFeedFromState)
