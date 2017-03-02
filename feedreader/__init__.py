@@ -14,21 +14,23 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import time,urllib2,re, gzip;
 from StringIO import StringIO;
 from archivefile import ArchiveFile
+
 regex_mediaLink = re.compile("(http|ftp)://[^'\"]*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
 regex_dateStringShortYear = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{2}");
 regex_dateString = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{4}");
 regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
 regex_replaceUnusableChar = re.compile("[:/ \\.\?\\\\]")
+
 month_replacements_long = {
     "January":"01",
     "February":"02",
     "March":"03",
     "April":"04",
-    "June":"06",    
+    "June":"06",
     "July":"07",
     "August":"08",
     "September":"09",
@@ -36,6 +38,7 @@ month_replacements_long = {
     "November":"11",
     "December":"12"
     };
+
 month_replacements = {
     "Jan":"01",
     "Feb":"02",
@@ -78,23 +81,21 @@ class Feed(object):
     self.lastLoad = self.archiveFile.lastLoad;
 
     self.title = opmlNode.getAttribute("text");
-    try:
-      self.picture = opmlNode.getAttribute("image");
-    except:
-      self.picture = "";
+    self.picture = opmlNode.getAttribute("image");
+
     try:
       self.fetchInterval = self.parseFetchInterval(opmlNode.getAttribute("fetchInterval"));
-    except:
+    except ValueError:
       self.fetchInterval = 0;
 
     try:
       self.maxArticleAge = int(opmlNode.getAttribute("maxArticleAge"));
-    except:
+    except ValueError:
       self.maxArticleAge = 99;
 
     try:
       self.maxArticleNumber = int(opmlNode.getAttribute("maxArticleNumber"));
-    except:
+    except ValueError:
       self.maxArticleNumber = 99;
 
   def loadFromState(self, stateObject, gui):
@@ -107,10 +108,7 @@ class Feed(object):
     self.lastLoad = self.archiveFile.lastLoad;
     self.title = stateObject.title
 
-    try:
-      self.picture = stateObject.picture;
-    except:
-      self.picture = "";
+    self.picture = stateObject.picture;
 
     self.fetchInterval = stateObject.fetchInterval
     self.maxArticleAge = stateObject.maxArticleAge
@@ -131,7 +129,7 @@ class Feed(object):
       self.updateFeed();
       self.saveChanges();
 
-  def reload(self, path = []):
+  def reload(self, path = None):
     self.updateFeed();
     self.saveChanges();
 
@@ -170,7 +168,8 @@ class Feed(object):
       self.gui.play(self);
       self.markRead();
 
-  def markRead(self, path = []):
+  def markRead(self, path = None):
+    path = path or [];
     self.loadFeed();
     if len(path) > 0:
       self.gui.log("feed mark read")
@@ -195,7 +194,8 @@ class Feed(object):
     diffTime = (actTime - self.lastLoad) / 60;
     return diffTime > self.fetchInterval;
 
-  def parseFetchInterval(self,interval):
+  @staticmethod
+  def parseFetchInterval(interval):
     if(interval.isdigit()):
       return int(interval);
     elif(interval.lower() == "hourly"):
@@ -207,14 +207,16 @@ class Feed(object):
     elif(interval.lower() == "monthly"):
       return 43200;
 
-  def readText(self,node,textNode):
+  @staticmethod
+  def readText(node,textNode):
     try:
       node = node.getElementsByTagName(textNode)[0].firstChild;
       return unicode(node.data);
     except:
       return "";
 
-  def parseDate(self,dateString):
+  @staticmethod
+  def parseDate(dateString):
     dateMatch = regex_dateString.search(dateString);
     if(dateMatch is not None):
       dateString = dateMatch.group();
@@ -223,7 +225,7 @@ class Feed(object):
       for month in month_replacements.keys():
         dateString = dateString.replace(month,month_replacements[month]);
       return time.strptime(dateString,"%d %m %Y");
-    else: 
+    else:
      dateMatch = regex_shortdateString.search(dateString)
      if(dateMatch is not None):
        dateString = dateMatch.group();
@@ -239,7 +241,8 @@ class Feed(object):
          return time.strptime(dateString,"%d %m %y");
     return time.localtime();
 
-  def writeDate(self, date):
+  @staticmethod
+  def writeDate(date):
     return time.strftime("%d %m %Y",date);
 
   def parseBoolean(self, boolean):
@@ -258,7 +261,8 @@ class Feed(object):
     self.gui.log("IndirectLink: "+link);
     return link;
 
-  def writeBoolean(self, boolean):
+  @staticmethod
+  def writeBoolean(boolean):
     if(boolean):
       return "True";
     else:
@@ -268,7 +272,7 @@ class Feed(object):
     try:
       safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
       self.gui.log('Downloading from url=%s' % safe_url)
-      sock = urllib2.urlopen( safe_url )    
+      sock = urllib2.urlopen( safe_url )
       if sock.info().get('Content-Encoding') == 'gzip':
         buf = StringIO(sock.read())
         f = gzip.GzipFile(fileobj=buf)
