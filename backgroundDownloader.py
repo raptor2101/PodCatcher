@@ -13,15 +13,16 @@ if not os.path.exists(DIR_ARCHIVES):
 ArchiveFile.setArchivePath(DIR_ARCHIVES);
 
 class ConsoleGui:
-   def log(self, message):
+  @staticmethod
+   def log(message):
      print message;
 try:
   PATH_FILE_OPML = sys.argv[2];
-except:
+except IndexError:
   PATH_FILE_OPML = "";
-  
+
 if (PATH_FILE_OPML == ""):
   PATH_FILE_OPML = os.path.join(DIR_HOME,"opml.xml");
-  
+
 opmlFile = OpmlFile(PATH_FILE_OPML, DIR_HOME, ConsoleGui());
 opmlFile.load();
