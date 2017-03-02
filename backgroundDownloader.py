@@ -12,7 +12,7 @@ if not os.path.exists(DIR_ARCHIVES):
   os.mkdir(DIR_ARCHIVES);
 ArchiveFile.setArchivePath(DIR_ARCHIVES);
 
-class ConsoleGui:
+class ConsoleGui(object):
   @staticmethod
   def log(message):
     print message;
