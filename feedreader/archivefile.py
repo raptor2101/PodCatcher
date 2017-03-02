@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os, pickle;
-from xml.dom import minidom
 
 class FeedState(object):
   def __init__(self, feed):
@@ -68,8 +67,8 @@ class ArchiveFile(object):
     self.archiveFile = os.path.join(self.archiveDir,itemId+".archive");
 
     if os.path.exists(self.archiveFile):
-      input = open(self.archiveFile, 'rb')
-      unsortedObject = pickle.load(input);
+      filePointer = open(self.archiveFile, 'rb')
+      unsortedObject = pickle.load(filePointer);
       self.feedItems = sorted(unsortedObject, key = lambda item:item.date, reverse=True);
       self.lastLoad = os.stat(self.archiveFile)[8];
 
