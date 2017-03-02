@@ -10,6 +10,10 @@ class AtomFeed (Feed):
   def updateFeed(self):
     self.gui.log("Load: "+self.feedUrl);
     xmlPage = self.loadPage(self.feedUrl);
+
+    if(xmlPage is None):
+      return;
+
     xmlDocument = minidom.parseString(xmlPage);
 
     counter = 0;

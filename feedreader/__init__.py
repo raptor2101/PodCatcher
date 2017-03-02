@@ -49,7 +49,6 @@ month_replacements = {
     "Oct":"10",
     "Nov":"11",
     "Dec":"12",
-    
   };
 
 class FeedItem(object):
@@ -65,7 +64,7 @@ class FeedItem(object):
     self.readed = None;
     self.guid = None;
     self.size = None;
-    
+
 class Feed(object):
   def loadFromNode(self, opmlNode, gui):
     self.gui = gui;
@@ -74,12 +73,10 @@ class Feed(object):
     if(self.objectId == ""):
       self.objectId = regex_replaceUnusableChar.sub("_",self.feedUrl);
     self.archiveFile=ArchiveFile(self.objectId);
-    
+
     self.feedItems = self.archiveFile.feedItems;
     self.lastLoad = self.archiveFile.lastLoad;
-    
-    
-    
+
     self.title = opmlNode.getAttribute("text");
     try:
       self.picture = opmlNode.getAttribute("image");
@@ -89,60 +86,60 @@ class Feed(object):
       self.fetchInterval = self.parseFetchInterval(opmlNode.getAttribute("fetchInterval"));
     except:
       self.fetchInterval = 0;
-    
+
     try:
       self.maxArticleAge = int(opmlNode.getAttribute("maxArticleAge"));
     except:
       self.maxArticleAge = 99;
-    
+
     try:
       self.maxArticleNumber = int(opmlNode.getAttribute("maxArticleNumber"));
     except:
       self.maxArticleNumber = 99;
-    
+
   def loadFromState(self, stateObject, gui):
     self.gui = gui;
     self.feedUrl = stateObject.feedUrl
     self.objectId = stateObject.objectId
     self.archiveFile=ArchiveFile(self.objectId);
-    
+
     self.feedItems = self.archiveFile.feedItems;
     self.lastLoad = self.archiveFile.lastLoad;
     self.title = stateObject.title
-    
+
     try:
       self.picture = stateObject.picture;
     except:
       self.picture = "";
-    
+
     self.fetchInterval = stateObject.fetchInterval
     self.maxArticleAge = stateObject.maxArticleAge
     self.maxArticleNumber = stateObject.maxArticleNumber
-    
+
   def saveChanges(self):
     self.archiveFile.save();
-  
+
   def hasUnreadItems(self):
     self.loadFeed();
     for feedItem in self.feedItems:
       if(not feedItem.readed):
         return True;
     return False;
-    
+
   def loadFeed(self):
     if(self.updatedNeeded()):
       self.updateFeed();
-      self.saveChanges();      
-  
+      self.saveChanges();
+
   def reload(self, path = []):
     self.updateFeed();
     self.saveChanges();
-    
+
   def displayMenu(self, path):
     self.loadFeed();
     for feedItem in self.feedItems:
      self.gui.buildMenuEntry(feedItem,len(self.feedItems));
-  
+
   def insertFeedItem(self,newItem):
     i = 0
     for i in range(len(self.feedItems)):
@@ -150,17 +147,17 @@ class Feed(object):
         self.feedItems.insert(i, newItem);
         return;
     self.feedItems.insert(i, newItem);
-  
+
   def shrinkFeedItems(self):
     while(len(self.feedItems) > self.maxArticleNumber):
       delItem = self.feedItems[self.maxArticleNumber];
       self.feedItems.remove(delItem);
-  
+
   def getAllUnreadItems(self,items):
     for feedItem in self.feedItems:
       if(not feedItem.readed):
         items.append(feedItem);
-        
+
   def play(self, path):
     self.loadFeed();
     if len(path) > 0:
@@ -172,8 +169,7 @@ class Feed(object):
     else:
       self.gui.play(self);
       self.markRead();
-    
-      
+
   def markRead(self, path = []):
     self.loadFeed();
     if len(path) > 0:
@@ -187,18 +183,18 @@ class Feed(object):
         self.gui.log("readed set "+feedItem.title)
         feedItem.readed = True;
     self.saveChanges();
-      
+
   def checkArticleAge(self, articleDate):
     articleAge = time.time() - time.mktime(articleDate);
     articleAge = articleAge / 86400 #to days;
-    
+
     return articleAge < self.maxArticleAge;
-  
+
   def updatedNeeded(self):
     actTime = time.time();
     diffTime = (actTime - self.lastLoad) / 60;
     return diffTime > self.fetchInterval;
-  
+
   def parseFetchInterval(self,interval):
     if(interval.isdigit()):
       return int(interval);
@@ -210,14 +206,14 @@ class Feed(object):
       return 10080;
     elif(interval.lower() == "monthly"):
       return 43200;
-  
+
   def readText(self,node,textNode):
     try:
       node = node.getElementsByTagName(textNode)[0].firstChild;
       return unicode(node.data);
     except:
       return "";
-  
+
   def parseDate(self,dateString):
     dateMatch = regex_dateString.search(dateString);
     if(dateMatch is not None):
@@ -241,18 +237,17 @@ class Feed(object):
          for month in month_replacements.keys():
            dateString = dateString.replace(month,month_replacements[month]);
          return time.strptime(dateString,"%d %m %y");
-         
     return time.localtime();
-    
+
   def writeDate(self, date):
     return time.strftime("%d %m %Y",date);
-    
+
   def parseBoolean(self, boolean):
     if(boolean == "True"):
       return True;
     else:
       return False;
-  
+
   def parseIndirectItem(self, targetUrl):
     self.gui.log("TargetUrl: "+targetUrl);
     htmlPage = self.loadPage(targetUrl);
@@ -261,30 +256,32 @@ class Feed(object):
       return "";
     link = match.group();
     self.gui.log("IndirectLink: "+link);
-    
     return link;
-  
+
   def writeBoolean(self, boolean):
     if(boolean):
       return "True";
     else:
       return "False";
-      
+
   def loadPage(self,url):
-    safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
-    self.gui.log('Downloading from url=%s' % safe_url)
-    sock = urllib2.urlopen( safe_url )    
-    
-    if sock.info().get('Content-Encoding') == 'gzip':
-      buf = StringIO(sock.read())
-      f = gzip.GzipFile(fileobj=buf)
-      doc = f.read()
-    else:
-      doc = sock.read()
-    sock.close()
-    
     try:
-      content = doc.encode('UTF-8');
-    except:
-      content = doc;
+      safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
+      self.gui.log('Downloading from url=%s' % safe_url)
+      sock = urllib2.urlopen( safe_url )    
+      if sock.info().get('Content-Encoding') == 'gzip':
+        buf = StringIO(sock.read())
+        f = gzip.GzipFile(fileobj=buf)
+        doc = f.read()
+      else:
+        doc = sock.read()
+      sock.close()
+
+      try:
+        content = doc.encode('UTF-8');
+      except UnicodeDecodeError:
+        content = doc;
+    except urllib2.HTTPError:
+      self.gui.log("Error while downloading url=%s"%safe_url);
+      content = None;
     return content;
