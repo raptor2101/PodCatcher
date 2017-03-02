@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import shutil,os,pickle;
+import os,pickle;
 from xml.dom import minidom;
 from xml.dom import Node;
 from feedfactory import FeedFactory;
@@ -28,10 +28,7 @@ class OpmlFolder(object):
     self.gui = gui;
     self.elements = [];
     self.title = transformHtmlCodes(rootNode.getAttribute('text'));
-    try:
-      self.picture = rootNode.getAttribute("image");
-    except:
-      self.picture = "";
+    self.picture = rootNode.getAttribute("image");
 
     for node in rootNode.childNodes:
       if node.hasChildNodes() and node.firstChild.tagName == "outline":
@@ -60,7 +57,7 @@ class OpmlFolder(object):
     if len(path) > 0:
       index = int(path.pop(0));
       element = self.elements[index];
-      element.displayMenu(path); 
+      element.displayMenu(path);
     else:
       for element in self.elements:
         self.gui.buildMenuEntry(element,len(self.elements));
@@ -69,7 +66,7 @@ class OpmlFolder(object):
     if len(path) > 0:
       index = int(path.pop(0));
       element = self.elements[index];
-      element.play(path); 
+      element.play(path);
     else:
       self.gui.play(self);
       self.markRead();
@@ -122,7 +119,7 @@ class OpmlFile:
     if(OpmlArchiveFile.updateNeeded(opmlFile, archiveFile)):
       self.xmlDoc = minidom.parse(opmlFile)
       self.cleanupNodes(self.xmlDoc.documentElement);
-      self.xmlDoc.documentElement.normalize() 
+      self.xmlDoc.documentElement.normalize();
 
       for bodyNode in  self.xmlDoc.getElementsByTagName('body'):
         self.opmlFolder.loadFromNode(bodyNode, self.gui )
