@@ -212,7 +212,7 @@ class Feed(object):
     try:
       node = node.getElementsByTagName(textNode)[0].firstChild;
       return unicode(node.data);
-    except:
+    except UnicodeDecodeError,UnicodeEncodeError,IndexError:
       return "";
 
   @staticmethod
@@ -245,11 +245,9 @@ class Feed(object):
   def writeDate(date):
     return time.strftime("%d %m %Y",date);
 
+  @staticmethod
   def parseBoolean(self, boolean):
-    if(boolean == "True"):
-      return True;
-    else:
-      return False;
+    return bool(boolean == "True");
 
   def parseIndirectItem(self, targetUrl):
     self.gui.log("TargetUrl: "+targetUrl);
