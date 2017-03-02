@@ -14,8 +14,8 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, urllib, urllib2, os,re,math,time
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, urllib, os,re,math,time
 __plugin__ = "PodCatcher"
 
 regex_decimal = re.compile("\\d+");
@@ -26,22 +26,23 @@ translation = settings.getLocalizedString
 class SimpleXbmcGui(object):
   def __init__(self,path):
     self.path = path;
-    
-  def log(self, msg):
-    if type(msg) not in (str, unicode):
+
+  @staticmethod
+  def log(msg):
+    if not isinstance(msg,str) and not isinstance(msg,unicode):
       xbmc.log("[%s]: %s" % (__plugin__, type(msg)))
     else:
       xbmc.log("[%s]: %s" % (__plugin__, msg.encode('utf8')))
-  
+
   def buildMediaItem(self, element, markUnread):
     if(element.subTitle == ""):
       title = "%s (%s)"%(element.title,element.duration);
     else:
       title = "%s - %s (%s)"%(element.title,element.subTitle,element.duration);
-    
+
     if(type(element).__name__ == 'FeedItem'):
       title = "[%s] %s"%(time.strftime("%d.%m",element.date),title);
-      
+
     if(markUnread and not element.readed):
       title = "(*) %s"%(title);
     else:
@@ -61,22 +62,20 @@ class SimpleXbmcGui(object):
       "comment": element.description
       });
     return liz;
-  
+
   def buildMenuEntry(self, menuElement, elementCount ):
     if(self.path == ""):
       path = "%d"%(self.counter);
     else:
       path = "%s.%d"%(self.path,self.counter);
-    
+
     self.log(type(menuElement).__name__);
     if(type(menuElement).__name__ == 'FeedItem'):
       liz = self.buildMediaItem(menuElement,True);
-      
-      
       liz.addContextMenuItems([(translation(4020),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path))],True)
       u = "%s?path=%s&action=play&guid=%s" % (sys.argv[0],path,menuElement.guid)
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-      
+
     else:
       if(menuElement.hasUnreadItems()):
         title = "(*) %s"%(menuElement.title);
@@ -87,7 +86,7 @@ class SimpleXbmcGui(object):
         liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=menuElement.picture)
       else :
         liz=xbmcgui.ListItem(title, "")
-        
+
       contextMenuEntries = [
         (translation(30010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
         (translation(30011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
@@ -97,7 +96,7 @@ class SimpleXbmcGui(object):
       u = "%s?path=%s&action=browse" % (sys.argv[0],path)
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems = elementCount)
     self.counter+=1;
-  
+
   def play(self, playableObject):
     player = xbmc.Player();
     playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
@@ -109,25 +108,28 @@ class SimpleXbmcGui(object):
     else:
       items = [];
       playableObject.getAllUnreadItems(items);
-        
+
       for item in items:
         listItem = self.buildMediaItem(item,False);
         playlist.add(url=item.link, listitem=listItem)
-      
+
       player.play(playlist, playerItem);
       xbmc.executebuiltin("ActivateWindow(musicplaylist)");
-  
+
   def openMenuContext(self):
     self.counter = 0;
     self.dialogProgress = xbmcgui.DialogProgress();
-  
-  def closeMenuContext(self):
+
+  @staticmethod
+  def closeMenuContext():
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
-    
-  def refresh(self):
+
+  @staticmethod
+  def refresh():
     xbmc.executebuiltin("Container.Refresh")
-    
-  def durationStringToSec(self, durationString):
+
+  @staticmethod
+  def durationStringToSec(durationString):
     if(durationString is not None and regex_duration.match(durationString) is not None):
       decimalArray = regex_decimal.findall(durationString);
       if(len(decimalArray)==3):
@@ -138,7 +140,7 @@ class SimpleXbmcGui(object):
         return int(decimalArray[0])
     else:
       return 0;
-      
+
   def errorOK(self,title="", msg=""):
     e = str( sys.exc_info()[ 1 ] )
     self.log(e)
@@ -147,6 +149,6 @@ class SimpleXbmcGui(object):
     if not msg:
       msg = "ERROR!"
     if(e == None):
-      xbmcgui.Dialog().ok( title, msg, e )  
+      xbmcgui.Dialog().ok( title, msg, e )
     else:
-      xbmcgui.Dialog().ok( title, msg)  
+      xbmcgui.Dialog().ok( title, msg)
