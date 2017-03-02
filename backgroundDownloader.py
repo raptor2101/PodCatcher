@@ -14,8 +14,8 @@ ArchiveFile.setArchivePath(DIR_ARCHIVES);
 
 class ConsoleGui:
   @staticmethod
-   def log(message):
-     print message;
+  def log(message):
+    print message;
 try:
   PATH_FILE_OPML = sys.argv[2];
 except IndexError:
