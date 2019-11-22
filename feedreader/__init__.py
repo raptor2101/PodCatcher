@@ -270,7 +270,8 @@ class Feed(object):
     try:
       safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
       self.gui.log('Downloading from url=%s' % safe_url)
-      sock = urllib2.urlopen( safe_url )
+      req = urllib2.Request(safe_url, headers={'User-Agent': "Mozilla/5.0 (Linux; rv:68.2.0esr) Gecko/20100101 Firefox/68.2.0esr"})
+      sock = urllib2.urlopen(req)
       if sock.info().get('Content-Encoding') == 'gzip':
         buf = StringIO(sock.read())
         f = gzip.GzipFile(fileobj=buf)
