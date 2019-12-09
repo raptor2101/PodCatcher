@@ -15,9 +15,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import time,urllib2,re, gzip;
-from StringIO import StringIO;
+import time,re;
 from archivefile import ArchiveFile
+import socket;
+import requests;
+socket.setdefaulttimeout(1);
 
 regex_mediaLink = re.compile("(http|ftp)://[^'\"]*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
 regex_dateStringShortYear = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{2}");
@@ -270,20 +272,13 @@ class Feed(object):
     try:
       safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
       self.gui.log('Downloading from url=%s' % safe_url)
-      sock = urllib2.urlopen( safe_url )
-      if sock.info().get('Content-Encoding') == 'gzip':
-        buf = StringIO(sock.read())
-        f = gzip.GzipFile(fileobj=buf)
-        doc = f.read()
+      content = requests.get(safe_url, allow_redirects=True);
+      if(content.encoding is not None):
+        return content.text.encode(content.encoding);
       else:
-        doc = sock.read()
-      sock.close()
-
-      try:
-        content = doc.encode('UTF-8');
-      except UnicodeDecodeError:
-        content = doc;
-    except urllib2.HTTPError:
+        return content.text;
+    except Exception as error:
       self.gui.log("Error while downloading url=%s"%safe_url);
+      self.gui.log(error.message);
       content = None;
     return content;

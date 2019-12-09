@@ -41,7 +41,12 @@ class RssFeed (Feed):
     if(xmlPage is None):
       return;
 
-    xmlDocument = minidom.parseString(xmlPage);
+    try:
+      xmlDocument = minidom.parseString(xmlPage);
+    except Exception as error:
+      self.gui.log('Error while parsing result from %s' % self.feedUrl)
+      self.gui.log(error.message);
+      return;
     self.picture = self.findImage(xmlDocument);
 
     counter = 0;
