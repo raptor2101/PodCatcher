@@ -272,7 +272,7 @@ class Feed(object):
     try:
       safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
       self.gui.log('Downloading from url=%s' % safe_url)
-      content = requests.get(safe_url, allow_redirects=True);
+      content = requests.get(safe_url, allow_redirects=True, headers={'User-Agent': "Mozilla/5.0 (Linux; rv:68.2.0esr) Gecko/20100101 Firefox/68.2.0esr"});
       if(content.encoding is not None):
         return content.text.encode(content.encoding);
       else:
