@@ -5,7 +5,7 @@
   name="AudioPodcatcher"
   provider-name="Raptor 2101">
   <requires>
-   <import addon="xbmc.python" version="2.1.0"/>
+   <import addon="xbmc.python" version="2.25.0"/>
    <import addon="script.module.requests" version="2.18.4"/>
   </requires>
   <extension 
@@ -32,5 +32,8 @@
     <website>https://github.com/raptor2101/PodCatcher</website>
     <source>https://github.com/raptor2101/PodCatcher</source>
     <email>raptor2101@gmx.de</email>
+    <assets>
+        <icon>resources/icon.png</icon>
+    </assets>
   </extension>
 </addon>
